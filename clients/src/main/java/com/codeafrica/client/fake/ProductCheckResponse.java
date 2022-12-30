@@ -1,4 +1,4 @@
-package com.codeafrica.product.response;
+package com.codeafrica.client.fake;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ProductCheckResponse<T> {
-
-    private boolean isFakeProduct;
     private String Message;
     private T data;
+    private boolean isFakeProduct;
 }
