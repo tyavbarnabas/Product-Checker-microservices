@@ -1,7 +1,7 @@
 package com.codeafrica.fakeproduct.controller;
 
 
-import com.codeafrica.fakeproduct.response.ProductCheckResponse;
+import com.codeafrica.client.fake.fakeproduct.ProductCheckResponse;
 import com.codeafrica.fakeproduct.service.FakeProductCheckService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +19,9 @@ public class FakeProductCheckController {
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductCheckResponse<?>> isFakeProduct(@PathVariable("productId") Integer productId) {
-            boolean isFakeProductCheck = fakeProductCheckService.isFakeProduct(productId);
+            boolean isFakeProductCheck= fakeProductCheckService.isFakeProduct(productId);
         log.info("new product check report {}",productId);
             return new ResponseEntity<>(new ProductCheckResponse<>(
-                    "check on product has been completed Successfully ", "is product a fake" ,false), HttpStatus.OK);
+                    "check on product has been completed Successfully ", isFakeProductCheck ,false), HttpStatus.OK);
     }
 }

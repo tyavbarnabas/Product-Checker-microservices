@@ -1,9 +1,12 @@
 package com.codeafrica.product.serviceImpl;
 
+import com.codeafrica.client.fake.fakeproduct.FakeProductClient;
+import com.codeafrica.client.fake.notification.NotificationClient;
+import com.codeafrica.client.fake.notification.NotificationRequest;
+import com.codeafrica.client.fake.fakeproduct.ProductCheckResponse;
 import com.codeafrica.product.dto.ProductRegistrationRequest;
 import com.codeafrica.product.model.Product;
 import com.codeafrica.product.repository.ProductRepository;
-import com.codeafrica.product.response.ProductCheckResponse;
 import com.codeafrica.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,8 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final RestTemplate restTemplate;
+    private final FakeProductClient fakeProductClient;
+    private final NotificationClient notificationClient;
 
     @Override
     public Product registerProduct(ProductRegistrationRequest request) {
@@ -35,17 +40,23 @@ public class ProductServiceImpl implements ProductService {
         //todo:check if nafdac regNum is not taken
         //todo:check if product is fake
               productRepository.saveAndFlush(product);
-         //todo:send notification
 
-                ProductCheckResponse<?> productCheckResponse = restTemplate.getForObject(
-                        "http://localhost:9091/api/v1/fake/{productId}",
-                        ProductCheckResponse.class,product.getId());
+
+        ProductCheckResponse<?> productCheckResponse = fakeProductClient.isFakeProduct(product.getId());
 
         assert productCheckResponse != null;
         if(productCheckResponse.isFakeProduct()){
                     throw new IllegalStateException("it is a fake Product");
                 }
-
+        //todo:make it async. i.e add to queue
+        notificationClient.sendNotification(
+                new NotificationRequest(
+                        product.getId(),
+                        product.getNafdacRegNum(),
+                        String.format("Hi %s, welcome to codeafrca...",
+                                product.getName())
+                )
+        );
         return product;
 
     }

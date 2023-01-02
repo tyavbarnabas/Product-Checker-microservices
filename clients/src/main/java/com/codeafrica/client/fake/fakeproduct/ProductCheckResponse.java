@@ -1,4 +1,4 @@
-package com.codeafrica.client.fake;
+package com.codeafrica.client.fake.fakeproduct;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
