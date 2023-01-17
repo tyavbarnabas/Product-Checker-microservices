@@ -27,9 +27,8 @@ public class NotificationController {
             return new ResponseEntity<>(new ApiResponse<>(true,
                      notificationRequest.getMessage() , notificationRequest), HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(new ApiResponse<>(false,e.getMessage(),"Notication could not be sent"),HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new ApiResponse<>(false,e.getMessage(),"Notification could not be sent"),HttpStatus.CONFLICT);
         }
     }
-
 
 }
